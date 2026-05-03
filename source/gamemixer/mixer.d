@@ -183,6 +183,10 @@ nothrow:
     /// You can only call this if the mixer is created with the `isLoopback` option.
     void loopbackGenerate(float*[2] outBuffers, int frames);
     void loopbackMix(float*[2] inoutBuffers, int frames); ///ditto
+
+
+    bool isAnythingPlaying();
+    bool isChannelFree(int channel);
 }
 
 package:
@@ -497,6 +501,19 @@ public:
     bool isLoopback()
     {
         return _isLoopback;
+    }
+
+
+    bool isAnythingPlaying(){
+        for(int i = 0; i < _channels.length; i++){
+            if(!_channels[i].isAvailable())return true;
+        }
+        return false;
+    }
+
+    bool isChannelFree(int channel){
+        assert(channel < _channels.length);
+        return _channels[channel].isAvailable();
     }
 
 private:
